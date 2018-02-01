@@ -1,0 +1,3 @@
+Aldor is a programming language. It is the successor of A# as the extension language of the Axiom computer algebra system.
+Aldor combines imperative, functional, and object-oriented features. It has an elaborate type system,"Aldor Programming Language". Aldor.org. Retrieved 12 February 2017.  allowing types to be used as first-class values. Aldor's syntax is heavily influenced by Pascal, but it is optionally indentation-sensitive, using whitespace characters and the off-side rule, like Python. In its current implementation, it is compiled, but an interactive listener is provided.
+Aldor is distributed as free and open-source software, under the Apache License 2.0.

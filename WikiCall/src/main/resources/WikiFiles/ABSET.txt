@@ -1,0 +1,1 @@
+ABSET was an early declarative programming language from the University of Aberdeen.
