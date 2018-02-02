@@ -3,6 +3,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Date;
 import java.util.concurrent.*;
 import java.util.stream.Stream;
 
@@ -12,14 +13,15 @@ public class CSVReader {
     public static void main(String[] args){
         try {
 
-            ExecutorService executorService = new ScheduledThreadPoolExecutor(10);
+            ExecutorService executorService = new ScheduledThreadPoolExecutor(1);
 
-            Stream<String> lines = Files.lines(Paths.get("/Users/virendrac/Training/JavaLearning/CSVReader/src/main/resources/Multithreading_Task1_Books_copy.csv"));
+            Stream<String> lines = Files.lines(Paths.get("/Users/virendrac/Training/JavaLearning/CSVReader/src/main/resources/Multithreading_Task1_Books.csv"));
             final int n=100;
             final int countLine = 0;
 
+            System.out.println("Main start time:: "+new Date());
+
             List< String> list = new ArrayList<String>((int) (n*1.75));
-            List<Future<String>> futureList = new ArrayList<Future<String>>();
 
             lines.forEach(line-> {
 
@@ -27,19 +29,16 @@ public class CSVReader {
                     list.add(line);
                 }else{
                     CSVSplitter splitter=new CSVSplitter(new ArrayList<>(list));
-                    futureList.add(executorService.submit(splitter));
+                    executorService.submit(splitter);
                     list.clear();
                 }
 
 
             });
-            System.out.println("future");
-            System.out.println(futureList.get(0).get());
-            System.out.println("completed");
 
+            System.out.println("Main Thread End time:: "+new Date());
 
-
-//          List<String> first2Lines = lines.limit(2).collect(Collectors.toList());
+            executorService.shutdown();
 
         }catch (FileNotFoundException e){
             e.printStackTrace();
@@ -51,7 +50,7 @@ public class CSVReader {
     }
 }
 
-class CSVSplitter implements Callable<String>{
+class CSVSplitter implements  Runnable {
 
     static int index=0;
     List< String>  lines;
@@ -61,13 +60,27 @@ class CSVSplitter implements Callable<String>{
     }
 
     @Override
-    public String call() throws Exception {
+    public void run()  {
 
-        String retVal;
-        BufferedWriter writer=Files.newBufferedWriter(Paths.get("/Users/virendrac/Training/JavaLearning/CSVReader/src/main/resources/tmp/File"+index+".txt"));
-        writer.write(lines.toString());
-        retVal="File"+index+".txt written";
-        index++;
-        return retVal;
+        int i = index;
+        synchronized ((Object) index) {
+            index++;
+        }
+        System.out.println(Thread.activeCount()+" :: Start time:: "+new Date());
+        try {
+
+            BufferedWriter writer = null;
+
+            writer = Files.newBufferedWriter(Paths.get("/Users/virendrac/Training/JavaLearning/CSVReader/src/main/resources/tmp/File" + i + ".txt"));
+
+            writer.write(lines.toString());
+            writer.flush();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        System.out.println("End time:: "+new Date());
+
     }
+
 }
