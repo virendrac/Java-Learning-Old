@@ -14,7 +14,7 @@ public class Application {
         FileLoader f2=new FileLoader("/Users/virendrac/Training/JavaLearning/WikiCall/src/main/resources/KeyWordRepo/Multithreading_Task_2_fortune1000companies.txt");
         FileLoader f3=new FileLoader("/Users/virendrac/Training/JavaLearning/WikiCall/src/main/resources/KeyWordRepo/Multithreading_Task_2_java Keywords.txt");
 
-        ExecutorService executorService = new ScheduledThreadPoolExecutor(1000);
+        ExecutorService executorService = new ScheduledThreadPoolExecutor(1);
         CompletionService completionService = new ExecutorCompletionService(executorService);
         List<Future<String>> future= new ArrayList<>();
 

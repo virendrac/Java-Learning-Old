@@ -1,0 +1,13 @@
+# Spring Boot configuration
+spring:
+  profiles:
+    active: development
+# Server configuration
+server:
+  port: 10702
+  sessionTimeout: 30
+# Security configuration
+#security:
+#  user:
+#    name: user
+#    password: user

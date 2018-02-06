@@ -28,30 +28,30 @@ public class WikiCaller  implements Callable<String>{
 
             url = new URL(https_url);
             HttpsURLConnection con = (HttpsURLConnection)url.openConnection();
+            synchronized (con) {
+                if (con.getResponseCode() == 200) {
 
-            if(con.getResponseCode()==200) {
-
-                ObjectMapper mapper = new ObjectMapper();
+                    ObjectMapper mapper = new ObjectMapper();
 
 
-                BufferedReader br = new BufferedReader(new InputStreamReader(con.getInputStream()));
-                String response = br.readLine();
-                String[] arr = response.split("\\{");
-                response = arr[arr.length - 1];
-                response = "{" + response.substring(0, response.length() - 3);
+                    BufferedReader br = new BufferedReader(new InputStreamReader(con.getInputStream()));
+                    String response = br.readLine();
+                    String[] arr = response.split("\\{");
+                    response = arr[arr.length - 1];
+                    response = "{" + response.substring(0, response.length() - 3);
 
-                Map<String, Object> wikiMap = mapper.readValue(response, new TypeReference<Map<String, Object>>() {
-                });
+                    Map<String, Object> wikiMap = mapper.readValue(response, new TypeReference<Map<String, Object>>() {
+                    });
 
-                BufferedWriter writer = Files.newBufferedWriter(Paths.get("/Users/virendrac/Training/JavaLearning/WikiCall/src/main/resources/WikiFiles/" + keyword + ".txt"));
-                response = wikiMap.get("extract").toString();
-                //            System.out.println(response);
-                writer.write(response);
-                writer.flush();
-                this.notifyAll();
-            }
-            else{
-                return "Unsuccessful writing :: "+keyword+".txt";
+                    BufferedWriter writer = Files.newBufferedWriter(Paths.get("/Users/virendrac/Training/JavaLearning/WikiCall/src/main/resources/WikiFiles/" + keyword + ".txt"));
+                    response = wikiMap.get("extract").toString();
+                    //            System.out.println(response);
+                    writer.write(response);
+                    writer.flush();
+                    this.notifyAll();
+                } else {
+                    return "Unsuccessful writing :: " + keyword + ".txt";
+                }
             }
 
         } catch (MalformedURLException e) {
