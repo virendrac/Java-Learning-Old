@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Date;
 import java.util.concurrent.*;
 import java.util.stream.Stream;
+import com.property.PropertiesGetter;
 
 public class CSVReader {
 
@@ -15,11 +16,9 @@ public class CSVReader {
 
             ExecutorService executorService = new ScheduledThreadPoolExecutor(1);
 
-            Stream<String> lines = Files.lines(Paths.get("/Users/virendrac/Training/JavaLearning/CSVReader/src/main/resources/Multithreading_Task1_Books.csv"));
+            Stream<String> lines = Files.lines(Paths.get(PropertiesGetter.getProperty("csvFile")));
             final int n=100;
             final int countLine = 0;
-
-            System.out.println("Main start time:: "+new Date());
 
             List< String> list = new ArrayList<String>((int) (n*1.75));
 
@@ -35,8 +34,6 @@ public class CSVReader {
 
 
             });
-
-            System.out.println("Main Thread End time:: "+new Date());
 
             executorService.shutdown();
 
@@ -54,6 +51,7 @@ class CSVSplitter implements  Runnable {
 
     static int index=0;
     List< String>  lines;
+    static String writeLocation=PropertiesGetter.getProperty("writeLocation");
 
     public CSVSplitter(List< String>  lines) {
         this.lines=lines;
@@ -66,12 +64,11 @@ class CSVSplitter implements  Runnable {
         synchronized ((Object) index) {
             index++;
         }
-        System.out.println(Thread.activeCount()+" :: Start time:: "+new Date());
         try {
 
             BufferedWriter writer = null;
 
-            writer = Files.newBufferedWriter(Paths.get("/Users/virendrac/Training/JavaLearning/CSVReader/src/main/resources/tmp/File" + i + ".txt"));
+            writer = Files.newBufferedWriter(Paths.get(writeLocation+"File" + i + ".txt"));
 
             writer.write(lines.toString());
             writer.flush();
@@ -79,7 +76,6 @@ class CSVSplitter implements  Runnable {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        System.out.println("End time:: "+new Date());
 
     }
 

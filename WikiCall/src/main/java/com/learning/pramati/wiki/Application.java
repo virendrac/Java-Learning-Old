@@ -7,12 +7,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.*;
 
+import com.property.PropertiesGetter;
+
 public class Application {
     public static void main(String[] args){
 
-        FileLoader f1=new FileLoader("/Users/virendrac/Training/JavaLearning/WikiCall/src/main/resources/KeyWordRepo/Multithreading_Task2_ProgrammingLanguages.txt");
-        FileLoader f2=new FileLoader("/Users/virendrac/Training/JavaLearning/WikiCall/src/main/resources/KeyWordRepo/Multithreading_Task_2_fortune1000companies.txt");
-        FileLoader f3=new FileLoader("/Users/virendrac/Training/JavaLearning/WikiCall/src/main/resources/KeyWordRepo/Multithreading_Task_2_java Keywords.txt");
+        FileLoader f1=new FileLoader(PropertiesGetter.getProperty("progLangFile"));
+        FileLoader f2=new FileLoader(PropertiesGetter.getProperty("fortuneFile"));
+        FileLoader f3=new FileLoader(PropertiesGetter.getProperty("javaKeywordsFile"));
 
         ExecutorService executorService = new ScheduledThreadPoolExecutor(1);
         CompletionService completionService = new ExecutorCompletionService(executorService);
@@ -31,9 +33,6 @@ public class Application {
             future.add(completionService.submit(caller));
         }
 
-        for(Future<String> ftr: future){
-            System.out.println(ftr.isDone());
-        }
         executorService.shutdown();
 
     }

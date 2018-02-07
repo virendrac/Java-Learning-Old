@@ -45,7 +45,6 @@ public class WikiCaller  implements Callable<String>{
 
                     BufferedWriter writer = Files.newBufferedWriter(Paths.get("/Users/virendrac/Training/JavaLearning/WikiCall/src/main/resources/WikiFiles/" + keyword + ".txt"));
                     response = wikiMap.get("extract").toString();
-                    //            System.out.println(response);
                     writer.write(response);
                     writer.flush();
                     this.notifyAll();
