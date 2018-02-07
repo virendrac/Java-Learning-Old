@@ -17,7 +17,7 @@ public class CSVReader {
             ExecutorService executorService = new ScheduledThreadPoolExecutor(1);
 
             Stream<String> lines = Files.lines(Paths.get(PropertiesGetter.getProperty("csvFile")));
-            final int n=100;
+            final int n=Integer.parseInt(PropertiesGetter.getProperty("numberOfLinesPerFile"));
             final int countLine = 0;
 
             List< String> list = new ArrayList<String>((int) (n*1.75));

@@ -14,7 +14,7 @@
         <module>CSVReader</module>
         <module>WikiCall</module>
         <module>WordCounter</module>
-        <module>HR_Scheduling_App</module>
+        <module>LRUCache</module>
     </modules>
 
     <build>
